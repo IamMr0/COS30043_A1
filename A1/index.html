@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management</title>
+    <link rel="stylesheet" href="../framework/css/bootstrap.min.css">
+    <script src="../framework/js/vue.min.js"></script>
+    <script src="../framework/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="../framework/css/style.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <nav class="navbar navbar-expand-lg bg-light border-bottom">
+                <div class="container">
+                    <a class="navbar-brand fw-bold" href="#">Event Management</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="mainNavbar">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item"><a class="nav-link" href="#content">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#info">Events</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#register">Register</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            
+            <img src="abstract-polygonal-banner-background.jpg" alt="Event Management" class="img-fluid">
+        </header>
+        <section id="content" class="container my-5">
+            <h2 class="text-center mb-4">Why Choose Us?</h2>
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Expert Speakers</h5>
+                            <p class="card-text">Learn from industry leaders and experts.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Networking Opportunities</h5>
+                            <p class="card-text">Connect with like-minded professionals.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Innovative Workshops</h5>
+                            <p class="card-text">Participate in hands-on sessions.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Comprehensive Topics</h5>
+                            <p class="card-text">Explore a wide range of subjects.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Exclusive Content</h5>
+                            <p class="card-text">Access to premium materials.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Flexible Schedule</h5>
+                            <p class="card-text">Attend sessions that fit your timetable.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="info" class="container my-5">
+            <h2 class="text-center mb-4">Event Information</h2>
+            <div class="mb-3">
+                <input type="text" id="searchEventId" class="form-control" placeholder="Search by Event ID" v-model="searchEventId">
+                <input type="text" id="searchEventName" class="form-control mt-2" placeholder="Search by Event Name" v-model="searchEventName">
+                <input type="text" id="searchDuration" class="form-control mt-2" placeholder="Search by Duration" v-model="searchDuration">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Category:</label>
+                <div>
+                    <label class="me-3"><input type="radio" name="category" value="All" v-model="selectedCategory"> All</label>
+                    <label class="me-3"><input type="radio" name="category" value="Technology" v-model="selectedCategory"> Technology</label>
+                    <label class="me-3"><input type="radio" name="category" value="Business" v-model="selectedCategory"> Business</label>
+                    <label class="me-3"><input type="radio" name="category" value="Marketing" v-model="selectedCategory"> Marketing</label>
+                    <label class="me-3"><input type="radio" name="category" value="Finance" v-model="selectedCategory"> Finance</label>
+                </div>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Event ID</th>
+                        <th>Event Name</th>
+                        <th>Category</th>
+                        <th>Duration Hours</th>
+                    </tr>
+                </thead>
+                <tbody id="eventTable">
+                    <tr v-for="event in filteredEvents" :key="event.eventid">
+                        <td>{{ event.eventid }}</td>
+                        <td>{{ event.eventname }}</td>
+                        <td>{{ event.category }}</td>
+                        <td>{{ event.durationhour }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        <section id="register" class="container my-5">
+            <h2 class="text-center mb-4">Registration Form</h2>
+            <form id="registrationForm" @submit.prevent="submitRegistration">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" class="form-control" required v-model="username">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-control" required v-model="password">
+                </div>
+                <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    <input type="password" id="confirmPassword" class="form-control" required v-model="confirmPassword">
+                    <div id="passwordMessage" class="form-text text-danger" v-if="passwordMismatch">Passwords do not match.</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Event Category</label>
+                    <div>
+                        <label class="me-3"><input type="radio" name="eventCategory" value="Business" v-model="selectedEventCategory"> Business</label>
+                        <label class="me-3"><input type="radio" name="eventCategory" value="Technology" v-model="selectedEventCategory"> Technology</label>
+                        <label class="me-3"><input type="radio" name="eventCategory" value="Marketing" v-model="selectedEventCategory"> Marketing</label>
+                        <label class="me-3"><input type="radio" name="eventCategory" value="Finance" v-model="selectedEventCategory"> Finance</label>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="eventName" class="form-label">Event Name</label>
+                    <select id="eventName" class="form-select" v-model="selectedEventName">
+                        <option v-for="name in eventNames" :key="name" :value="name">{{ name }}</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+            <div id="registrationSummary" class="mt-4" v-if="registrationSummary">
+                <p class="mb-1"><strong>Username:</strong> {{ registrationSummary.username }}</p>
+                <p class="mb-1"><strong>Selected category:</strong> {{ registrationSummary.category }}</p>
+                <p class="mb-0"><strong>Selected event name:</strong> {{ registrationSummary.event }}</p>
+            </div>
+        </section>
+    </div>
+    <script src="../framework/js/app.js"></script>
+</body>
+</html>
