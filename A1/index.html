@@ -110,7 +110,7 @@
                     </tr>
                 </thead>
                 <tbody id="eventTable">
-                    <tr v-for="event in filteredEvents" :key="event.eventid">
+                    <tr v-for="event in paginatedEvents" :key="event.eventid">
                         <td>{{ event.eventid }}</td>
                         <td>{{ event.eventname }}</td>
                         <td>{{ event.category }}</td>
@@ -118,6 +118,25 @@
                     </tr>
                 </tbody>
             </table>
+            <nav aria-label="Event table pagination">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                        <a class="page-link" href="#" @click.prevent="goToFirstPage">First</a>
+                    </li>
+                    <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                        <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)">Previous</a>
+                    </li>
+                    <li class="page-item" v-for="page in pageNumbers" :key="page" :class="{ active: currentPage === page, disabled: page === '...' }">
+                        <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
+                    </li>
+                    <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                        <a class="page-link" href="#" @click.prevent="changePage(currentPage + 1)">Next</a>
+                    </li>
+                    <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                        <a class="page-link" href="#" @click.prevent="goToLastPage">Last</a>
+                    </li>
+                </ul>
+            </nav>
         </section>
         <section id="register" class="container my-5">
             <h2 class="text-center mb-4">Registration Form</h2>

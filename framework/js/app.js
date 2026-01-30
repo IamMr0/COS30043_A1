@@ -35,7 +35,9 @@ const app = new Vue({
             confirmPassword: '',
             selectedEventCategory: 'Business',
             selectedEventName: '',
-            registrationSummary: null
+            registrationSummary: null,
+            currentPage: 1,
+            itemsPerPage: 5
         };
     },
     computed: {
@@ -46,6 +48,27 @@ const app = new Vue({
                        (this.searchDuration === '' || event.durationhour.toString().includes(this.searchDuration)) &&
                        (this.selectedCategory === 'All' || event.category === this.selectedCategory);
             });
+        },
+        paginatedEvents() {
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+            return this.filteredEvents.slice(start, end);
+        },
+        totalPages() {
+            return Math.ceil(this.filteredEvents.length / this.itemsPerPage);
+        },
+        pageNumbers() {
+            const pages = [];
+            if (this.totalPages <= 3) {
+                for (let i = 1; i <= this.totalPages; i++) pages.push(i);
+            } else if (this.currentPage <= 2) {
+                pages.push(1, 2, '...');
+            } else if (this.currentPage >= this.totalPages - 1) {
+                pages.push('...', this.totalPages - 1, this.totalPages);
+            } else {
+                pages.push('...', this.currentPage - 1, this.currentPage, this.currentPage + 1, '...');
+            }
+            return pages;
         },
         eventNames() {
             return this.events
@@ -62,8 +85,21 @@ const app = new Vue({
         }
     },
     watch: {
+        searchEventId() {
+            this.currentPage = 1;
+        },
+        searchEventName() {
+            this.currentPage = 1;
+        },
+        searchDuration() {
+            this.currentPage = 1;
+        },
+        selectedCategory() {
+            this.currentPage = 1;
+        },
         selectedEventCategory() {
             this.selectedEventName = this.eventNames[0] || '';
+            this.currentPage = 1;
         }
     },
     methods: {
@@ -76,6 +112,18 @@ const app = new Vue({
                 category: this.selectedEventCategory,
                 event: this.selectedEventName
             };
+        },
+        changePage(page) {
+            if (page === '...') return;
+            if (page > 0 && page <= this.totalPages) {
+                this.currentPage = page;
+            }
+        },
+        goToFirstPage() {
+            this.currentPage = 1;
+        },
+        goToLastPage() {
+            this.currentPage = this.totalPages;
         }
     }
 });
