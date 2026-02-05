@@ -1,0 +1,6 @@
+# Ignore all zip files
+*.zip
+
+# Ignore all Word documents
+*.doc
+*.docx
